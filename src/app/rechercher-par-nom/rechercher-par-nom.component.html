@@ -1,0 +1,33 @@
+    <div class="container">
+        <form class="form-inline">
+            <div class="form-group mx-sm-3 mb-2 mt-2 ">
+            <label>Nom Patient en tapant</label>
+            <input #nom [(ngModel)]="searchTerm" name="searchTerm" class="form-control" >
+            </div>
+            </form>
+        <div class="card shadow mb-4">
+        <div class="card-body">
+        <table class="table table-striped">
+        <thead>
+            <tr> <th>Id</th>
+                <th>Nom Prenom</th>
+                 <th>Age</th>
+                  <th>Maladie</th>
+                   <th>Adresse</th>
+                    <th>Medecin</th>
+                     </tr>
+            <tbody *ngFor="let patient of patients | searchFilter: searchTerm ">
+            <tr >
+            <td>{{patient.idPatient}}</td>
+            <td>{{patient.nomprenomP}}</td>
+            <td>{{patient.age}}</td>
+            <td>{{patient.maladie}}</td>
+            <td>{{patient.adresseP}}</td>
+            <td>{{patient.medecin?.nomprenomM}}</td>
+                </tr>
+                </tbody>
+                </table>
+                </div>
+                </div>
+                </div>
+  
