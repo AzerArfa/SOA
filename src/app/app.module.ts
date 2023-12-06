@@ -7,10 +7,15 @@ import { PatientsComponent } from './patients/patients.component';
 import { AddPatientComponent } from './add-patient/add-patient.component';
 import { FormsModule } from '@angular/forms';
 import { UpdatePatientComponent } from './update-patient/update-patient.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RechercheParMedecinComponent } from './recherche-par-medecin/recherche-par-medecin.component';
 import { RechercherParNomComponent } from './rechercher-par-nom/rechercher-par-nom.component';
 import { SearchFilterPipe } from './search-filter.pipe';
+import { ListeMedecinsComponent } from './liste-medecins/liste-medecins.component';
+import { UpdateMedecinComponent } from './update-medecin/update-medecin.component';
+import { LoginComponent } from './login/login.component';
+import { ForbiddenComponent } from './forbidden/forbidden.component';
+import { TokenInterceptor } from './services/token.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,7 +24,11 @@ import { SearchFilterPipe } from './search-filter.pipe';
     UpdatePatientComponent,
     RechercheParMedecinComponent,
     RechercherParNomComponent,
-    SearchFilterPipe
+    SearchFilterPipe,
+    ListeMedecinsComponent,
+    UpdateMedecinComponent,
+    LoginComponent,
+    ForbiddenComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +36,9 @@ import { SearchFilterPipe } from './search-filter.pipe';
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [{ provide : HTTP_INTERCEPTORS,
+    useClass : TokenInterceptor,
+    multi : true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

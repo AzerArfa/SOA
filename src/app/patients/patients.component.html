@@ -17,8 +17,8 @@
     <td>{{patient.maladie}}</td>
     <td>{{patient.adresseP}}</td>
     <td>{{patient.medecin?.nomprenomM}}</td>
-    <td><a class="btn btn-danger" (click)="supprimerPatient(patient)">Supprimer</a></td>
-    <td><a class="btn btn-success" [routerLink]="['/updatePatient',patient.idPatient]">Modifier</a></td>
+    <td><a *ngIf="authService.isAdmin()" class="btn btn-danger" (click)="supprimerPatient(patient)">Supprimer</a></td>
+    <td><a *ngIf="authService.isAdmin()"class="btn btn-success" [routerLink]="['/updatePatient',patient.idPatient]">Modifier</a></td>
 
     </tr>
     </tbody>

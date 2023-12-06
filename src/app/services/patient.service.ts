@@ -4,6 +4,7 @@ import { Medecin } from '../model/medecin.model';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MedecinWrapper } from '../model/MedecinWrapper';
+import { AuthService } from './auth.service';
 const httpOptions = {headers: new HttpHeaders( {'Content-Type': 'application/json'} )
 };
 
@@ -17,30 +18,46 @@ export class PatientService {
   patients! : Patient[]; 
   medecins! : Medecin[];
 patient! : Patient;
-  constructor(private http : HttpClient) {
+  constructor(private http : HttpClient,
+    private authService : AuthService) {
    
    }
    listePatients(): Observable<Patient[]> {
-    return this.http.get<Patient[]>(this.apiURL);
+  
+
+    return this.http.get<Patient[]>(this.apiURL+"/all");
   }
   listeMedecins():Observable<MedecinWrapper>{
-    return this.http.get<MedecinWrapper>(this.apiURLMed);
+    let jwt = this.authService.getToken();
+jwt = "Bearer "+jwt;
+let httpHeaders = new HttpHeaders({"Authorization":jwt})
+    return this.http.get<MedecinWrapper>(this.apiURLMed,{headers:httpHeaders});
 
     }
     consulterMedecin(id:number): Medecin{
       return this.medecins.find(med => med.idMedecin == id)!;
       }
       ajouterPatient( pat: Patient):Observable<Patient>{
-        return this.http.post<Patient>(this.apiURL, pat, httpOptions);
+        let jwt = this.authService.getToken();
+jwt = "Bearer "+jwt;
+let httpHeaders = new HttpHeaders({"Authorization":jwt})
+return this.http.post<Patient>(this.apiURL+"/addpat", pat, {headers:httpHeaders});
         }
    supprimerPatient(id : number) {
-    const url = `${this.apiURL}/${id}`;
-    return this.http.delete(url, httpOptions);
+    const url = `${this.apiURL}/delpat/${id}`;
+let jwt = this.authService.getToken();
+jwt = "Bearer "+jwt;
+let httpHeaders = new HttpHeaders({"Authorization":jwt})
+return this.http.delete(url, {headers:httpHeaders});
+
     }
     
     consulterPatient(id: number): Observable<Patient> {
-      const url = `${this.apiURL}/${id}`;
-      return this.http.get<Patient>(url);
+      const url = `${this.apiURL}/getbyid/${id}`;
+      let jwt = this.authService.getToken();
+      jwt = "Bearer "+jwt;
+      let httpHeaders = new HttpHeaders({"Authorization":jwt})
+      return this.http.get<Patient>(url,{headers:httpHeaders});
       }
   trierPatients(){
     this.patients = this.patients.sort((n1,n2) => {
@@ -55,8 +72,10 @@ patient! : Patient;
     }
     
     updatePatient(pat :Patient) : Observable<Patient>
-    {
-    return this.http.put<Patient>(this.apiURL, pat, httpOptions);
+    {let jwt = this.authService.getToken();
+      jwt = "Bearer "+jwt;
+      let httpHeaders = new HttpHeaders({"Authorization":jwt})
+      return this.http.put<Patient>(this.apiURL+"/updatepat", pat, {headers:httpHeaders});
     }
     rechercherParMedecin(idmed: number):Observable< Patient[]> {
       const url = `${this.apiURL}/patsmed/${idmed}`;
@@ -67,5 +86,8 @@ patient! : Patient;
         return this.http.get<Patient[]>(url);
         }
         
-
+        ajouterMedecin( med: Medecin):Observable<Medecin>{
+          return this.http.post<Medecin>(this.apiURLMed, med, httpOptions);
+          }
+          
   }
