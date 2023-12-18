@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Patient } from '../model/patient.model';
 import { PatientService } from '../services/patient.service';
 import { AuthService } from '../services/auth.service';
-
+import { Image } from '../model/image.model';
 @Component({
   selector: 'app-patients',
   templateUrl: './patients.component.html',
@@ -16,19 +16,25 @@ export class PatientsComponent implements OnInit{
 
       
     }
-    chargerPatients(){
+    chargerPatients() {
       this.patientService.listePatients().subscribe(pats => {
-      console.log(pats);
-      this.patients = pats;
-      });
-      }
+        this.patients = pats;
+        this.patients.forEach((pat) => {
+        pat.imageStr = 'data:' + pat.images[0].type + ';base64,' +
+        pat.images[0].image;
+        });
+        });
+        
+    }
+    
+      
       
     supprimerPatient(p: Patient)
     {
     let conf = confirm("Etes-vous sûr ?");
     if (conf)
     this.patientService.supprimerPatient(p.idPatient!).subscribe(() => {
-    console.log("produit supprimé");
+    console.log("patuit supprimé");
     this.chargerPatients();
     });
     }

@@ -3,7 +3,7 @@ import { Patient } from '../model/patient.model';
 import { PatientService } from '../services/patient.service';
 import { Medecin } from '../model/medecin.model';
 import { Router } from '@angular/router';
-
+import { Image } from '../model/image.model';
 @Component({
   selector: 'app-add-patient',
   templateUrl: './add-patient.component.html',
@@ -14,6 +14,8 @@ export class AddPatientComponent implements OnInit{
   medecins! : Medecin[];
 newIdMedecin! : number;
 newMedecin! : Medecin;
+uploadedImage!: File;
+imagePath: any;
 
   constructor(private patientService: PatientService,
     private router :Router){}
@@ -24,6 +26,19 @@ newMedecin! : Medecin;
       console.log(pat);
       this.router.navigate(['patients']);
       });
+      this.patientService
+.uploadImage(this.uploadedImage, this.uploadedImage.name)
+.subscribe((img: Image) => {
+this.newPatient.image=img;
+this.newPatient.medecin = this.medecins.find(med => med.idMedecin
+== this.newIdMedecin)!;
+this.patientService
+.ajouterPatient(this.newPatient)
+.subscribe(() => {
+this.router.navigate(['produits']);
+});
+});
+
       }
       
   ngOnInit(): void {
@@ -34,4 +49,11 @@ newMedecin! : Medecin;
     );
     
   }
+  onImageUpload(event: any) {
+    this.uploadedImage = event.target.files[0];
+    var reader = new FileReader();
+    reader.readAsDataURL(this.uploadedImage);
+    reader.onload = (_event) => { this.imagePath = reader.result; }
+    }
+    
 }

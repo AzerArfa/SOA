@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MedecinWrapper } from '../model/MedecinWrapper';
 import { AuthService } from './auth.service';
+import { Image } from '../model/image.model';
 const httpOptions = {headers: new HttpHeaders( {'Content-Type': 'application/json'} )
 };
 
@@ -89,5 +90,25 @@ return this.http.delete(url, {headers:httpHeaders});
         ajouterMedecin( med: Medecin):Observable<Medecin>{
           return this.http.post<Medecin>(this.apiURLMed, med, httpOptions);
           }
-          
+          uploadImage(file: File, filename: string): Observable<Image>{
+            const imageFormData = new FormData();
+            imageFormData.append('image', file, filename);
+            const url = `${this.apiURL + '/image/upload'}`;
+            return this.http.post<Image>(url, imageFormData);
+            }
+            loadImage(id: number): Observable<Image> {
+            const url = `${this.apiURL + '/image/get/info'}/${id}`;
+            return this.http.get<Image>(url);
+            }
+            uploadImagePat(file: File, filename: string, idProd:number): Observable<any>{
+              const imageFormData = new FormData();
+              imageFormData.append('image', file, filename);
+              const url = `${this.apiURL + '/image/uplaodImagePat'}/${idProd}`;
+              return this.http.post(url, imageFormData);
+           }
+              supprimerImage(id : number) {
+                const url = `${this.apiURL}/image/delete/${id}`;
+                return this.http.delete(url, httpOptions);
+                }
+                
   }

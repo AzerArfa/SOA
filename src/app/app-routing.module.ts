@@ -10,8 +10,10 @@ import { UpdateMedecinComponent } from './update-medecin/update-medecin.componen
 import { LoginComponent } from './login/login.component';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { PatientGuard } from './patient.guard';
+import { RegisterComponent } from './register/register.component';
 const routes: Routes = [
   {path: "patients", component : PatientsComponent},
+  {path:'register',component:RegisterComponent},
   {path: "add-patient", component : AddPatientComponent, canActivate:[PatientGuard]},
   {path: "updatePatient/:id", component: UpdatePatientComponent},
   {path: "rechercherParMedecin", component : RechercheParMedecinComponent},

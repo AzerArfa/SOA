@@ -8,7 +8,7 @@
           <th>Maladie</th>
            <th>Adresse</th>
             <th>Medecin</th>
-             <th></th><th></th></tr>
+             <th>Image</th><th></th></tr>
     <tbody *ngFor="let patient of patients">
     <tr >
     <td>{{patient.idPatient}}</td>
@@ -17,6 +17,10 @@
     <td>{{patient.maladie}}</td>
     <td>{{patient.adresseP}}</td>
     <td>{{patient.medecin?.nomprenomM}}</td>
+    <td><img class="card-img-top img-responsive"
+        src = "{{patient.imageStr}}"
+        style = "height :50px;width:100px">
+        </td>
     <td><a *ngIf="authService.isAdmin()" class="btn btn-danger" (click)="supprimerPatient(patient)">Supprimer</a></td>
     <td><a *ngIf="authService.isAdmin()"class="btn btn-success" [routerLink]="['/updatePatient',patient.idPatient]">Modifier</a></td>
 
